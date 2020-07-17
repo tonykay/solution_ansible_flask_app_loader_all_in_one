@@ -1,0 +1,91 @@
+---
+- name: Teardown Postgres 10
+  hosts: database_servers
+  become: true
+  gather_facts: false
+  vars:
+    postgres_rhel7_repo:  pgdg-redhat-repo-42.0-11.noarch
+    postgres_packages:
+      - postgresql10 
+      - postgresql10-server 
+      - postgresql10-contrib 
+      - postgresql10-libs
+    postgres_library: "python-psycopg2"
+    postgres_10_data_dir: /var/lib/pgsql/10/data
+    postgres_port: 5432
+
+  tasks:
+
+    - name: Remove Postgres packages
+      package:
+        name: "{{ __package }}"
+        state: absent
+      loop: 
+        - "{{ postgres_rhel7_repo }}"        
+        - "{{ postgres_library }}"
+        - "{{ postgres_packages }}"
+      loop_control:
+        loop_var: __package
+
+    - name: Remove Postgres 10 data directory
+      file:
+        path: /var/lib/pgsql/10
+        state: absent
+
+    - name: Remove Postgres user
+      user:
+        name: postgres
+        state: absent
+
+
+- name: Teardown Application Tier
+  hosts: app_servers
+  gather_facts: false
+  become: true
+  vars:
+    tomcat_packages:
+      - tomcat
+    tomcat_port: 8080    
+    tomcat_service: tomcat
+
+  tags:
+    - app_servers
+
+  tasks:
+
+    - name: Remove Tomcat package(s)
+      package:
+        name: "{{ tomcat_packages }}"
+        state: absent
+
+    - name: Create Tomcat content directory
+      file:
+        path: /usr/share/tomcat
+        state: absent
+
+
+- name: Teardown haproxy load balancer
+  hosts: load_balancers
+  gather_facts: false 
+  become: true
+
+  vars:
+    load_balancer_packages:
+      - haproxy
+
+  tags:
+    - load_balancers
+
+  tasks:
+
+    - name: Remove load balancer packages
+      package:
+        name: "{{ load_balancer_packages }}"
+        state: absent
+
+#    - name: configure haproxy
+#      file:
+#        path: /etc/haproxy/haproxy.cfg
+#        state: absent
+
+...
