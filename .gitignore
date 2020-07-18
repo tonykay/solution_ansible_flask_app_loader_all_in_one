@@ -2,5 +2,4 @@ venv
 *.pyc
 .DS_Store
 .vagrant
-README.adoc
 archive
