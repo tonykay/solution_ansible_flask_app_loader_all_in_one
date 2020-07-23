@@ -4,32 +4,6 @@
   gather_facts: false
   tags:
     - application_servers
-  vars:
-    flask_app_name: resource_hub
-    flask_user: flask
-    flask_home: /opt/
-    flask_repo: https://github.com/tonykay/resource_hub.git  
-    flask_scm_ref: main  
-    flask_app_lauch_script: /usr/local/bin/launch_resource_hub   
-    virtualenv_name: "venv-{{ flask_app_name }}"  
-    virtualenv_home: /opt/virtual_envs
-    virtualenv_python: /usr/bin/python3
-      
-
-    app_yum_packages:
-      - autoconf
-      - automake
-      - git
-      - gcc
-      - libtool
-      - python3
-      - python3-devel
-      - python3-pip
-
-    pip_dependencies:
-      - virtualenv
-      - pip  
-      - psycopg2-binary
 
   tasks:
 
