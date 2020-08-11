@@ -4,11 +4,14 @@
     name: "{{ flask_user }}"
     state: present  
 
-- name: Install flask packages
+- name: Install flask packages including postgres pre-reqs
   package:
     name: "{{ __package }}"
     state: present
-  loop: "{{ app_yum_packages }}"        
+  loop: 
+    - "{{ postgres_rhel7_repo }}"
+    - "{{ app_yum_packages }}"        
+    - "{{ postgres_library }}"
   loop_control:
     loop_var: __package
 
