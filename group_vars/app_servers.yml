@@ -23,7 +23,7 @@ app_yum_packages:
 pip_dependencies:
   - virtualenv
   - pip  
-  - psycopg2-binary
+#  - psycopg2-binary
 
 
 postgres_rhel7_repo: "https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm"

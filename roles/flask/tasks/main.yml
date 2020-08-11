@@ -36,7 +36,7 @@
       pip:
         name: "{{ pip_dependencies }}"
         state: latest
-        executable: /usr/bin/pip3
+        executable: /usr/local/bin/pip3
 
     - name: "Create virtualenv {{ virtualenv_name }} for Flask"
       pip:
