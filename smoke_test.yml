@@ -36,7 +36,7 @@
  
     - name: Check webserver for correct response
       uri:
-        url: "http://frontend1.{{ GUID }}.example.opentlc.com/ping"
+        url: "http://frontend1/ping"
         return_content: yes
       until: '"alive" in result.content'
       retries: 10

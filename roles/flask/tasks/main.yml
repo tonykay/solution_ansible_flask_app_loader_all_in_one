@@ -1,4 +1,11 @@
 ---
+- name: Add appdb1 IP address to app servers /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*appdb1$'
+    line: "{{ hostvars['appdb1']['ansible_default_ipv4']['address'] }} appdb1"
+    state: present
+
 - name: Create flask user
   user:
     name: "{{ flask_user }}"

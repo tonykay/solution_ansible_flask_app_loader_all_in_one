@@ -1,7 +1,15 @@
+- name: Get database IP address with hostvars for app servers
+  hosts: database_servers
+  gather_facts: true
+  tags:
+    - application_servers
+
+  tasks: []
+
 - name: Deploy, configure, and populate flask repo and virtualenv
   hosts: app_servers
   become: true
-  gather_facts: false
+  gather_facts: true
   tags:
     - application_servers
 
