@@ -1,0 +1,49 @@
+---
+- name: OpenStack end to end configuration
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Fetch Instance Info
+      os_server_info:
+        cloud: openstack
+        region_name: regionOne
+      register: r_os_servers
+
+    - name: Add host
+      add_host:
+        name: "{{ item.public_v4 }}"
+        ansible_user: cloud-user
+        ansible_ssh_private_key_file: "~/.ssh/test_id_rsa"
+        group:
+          - "{{ item.metadata.group }}"
+          - "{{ item.metadata.deployment_name }}"
+      loop: "{{ r_os_servers.openstack_servers }}"
+
+
+- name: Gather database facts
+  hosts: database_servers
+  gather_facts: true
+
+  tasks: []
+
+- name: Setup Repos
+  hosts: app_servers:load_balancers:database_servers
+  gather_facts: false
+  become: true
+  tags:
+    - common
+
+  tasks:
+
+    - name: Copy repo file
+      copy:
+        src: ../files/open_three-tier-app.repo
+        dest: /etc/yum.repos.d/open_three-tier-app.repo
+ 
+- import_playbook: provision_database_tier.yml
+- import_playbook: provision_app_tier.yml
+- import_playbook: provision_load_balancer_tier.yml
